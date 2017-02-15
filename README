@@ -1,0 +1,14 @@
+To set up dev VM:
+
+1)check out this project
+2)install vagrant
+3)Generate SSH keypair for the dev machine
+Move them to the root of the project (don't commit them or they'll end up in the history and on github)
+Add the public key to github
+4)copy kerblasto ssh keys to the root of the project (it will look for id_rsa_kerblasto & id_rsa_kerblasto.pub)
+4)vagrant up
+
+
+TODO:
+make VM accessible from host machine
+is public network option necessary for VM config?
