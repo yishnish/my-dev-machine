@@ -114,6 +114,9 @@ Vagrant.configure("2") do |config|
 		#install rvm and current stable ruby 
 		curl -sSL https://get.rvm.io | bash -s stable --ruby
 		
+		#change owner of /usr/local/rvm to vagrant user
+		sudo chown -R vagrant /usr/local/rvm/
+
 		#load the rvm script when you launch a bash shell
 		source /usr/local/rvm/scripts/rvm
 
