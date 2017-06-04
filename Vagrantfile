@@ -99,27 +99,15 @@ Vagrant.configure("2") do |config|
 	 ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 	 cp /vagrant/id_rsa /vagrant/id_rsa.pub /home/vagrant/.ssh
 	 
-	 #clone repos
-	 mkdir -p /home/vagrant/computer_programs/
-	 git clone git@github.com:yishnish/sketch.git /home/vagrant/computer_programs/sketch
-	 git clone git@github.com:yishnish/lyfe.git /home/vagrant/computer_programs/lyfe
-	 git clone git@github.com:yishnish/sample-mvc.git /home/vagrant/computer_programs/sample-mvc
-	 git clone git@github.com:yishnish/mytelnet.git /home/vagrant/computer_programs/mytelnet
-	 
-	 #install a source controlled bashrc 
-	 cp /vagrant/.bashrc /home/vagrant/.bashrc
-	 
-	 #install open-jdk
-	 apt-get install -y openjdk-8-jdk
-	 
-	 #install maven
-	 apt-get install -y maven
-
 	 #install node
 	 curl -sL https://deb.nodesource.com/setup_4.x | sh
 	 apt-get install -y nodejs
+	  
+	 #install a source controlled bashrc 
+	 cp /vagrant/.bashrc /home/vagrant/.bashrc
 	 
-	 #------------------------INSTALL RUBY AND RAILS------------------------------
+	 
+	 #------------------------INSTALL RVM, RUBY AND RAILS-RELATED-GEMS------------------------------
 		#add mpapis public key
 		gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 		
@@ -127,7 +115,7 @@ Vagrant.configure("2") do |config|
 		curl -sSL https://get.rvm.io | bash -s stable --ruby
 		
 		#load the rvm script when you launch a bash shell
-		source ~/.rvm/scripts/rvm
+		source /usr/local/rvm/scripts/rvm
 
 		#update out-of-date global gems
 		rvm gemset use global
@@ -137,6 +125,22 @@ Vagrant.configure("2") do |config|
 		gem install bundler
 		#install nokogiri globally
 		gem install nokogiri
+		
+		echo "source /usr/local/rvm/scripts/rvm" >> /home/vagrant/.bashrc
+	 #------------------------END INSTALL RVM, RUBY AND RAILS-RELATED-GEMS------------------------------
+	 
+	 #clone repos
+	 mkdir -p /home/vagrant/computer_programs/
+	 git clone git@github.com:yishnish/sketch.git /home/vagrant/computer_programs/sketch
+	 git clone git@github.com:yishnish/lyfe.git /home/vagrant/computer_programs/lyfe
+	 git clone git@github.com:yishnish/sample-mvc.git /home/vagrant/computer_programs/sample-mvc
+	 git clone git@github.com:yishnish/mytelnet.git /home/vagrant/computer_programs/mytelnet
+	
+	 #install open-jdk
+	 apt-get install -y openjdk-8-jdk
+	 
+	 #install maven
+	 apt-get install -y maven
 		
 	 #change the vagrant directory owner to vagrant instead of root
 	 chown -hR vagrant /home/vagrant
