@@ -175,13 +175,14 @@ Vagrant.configure("2") do |config|
 	#----------------DOCKER------------------------
 	 			
 	#clone git repos
-	mkdir -p /home/vagrant/computer_programs/
-	chown -hR vagrant /home/vagrant
+	mkdir -p /home/vagrant/computer_programs/	
 	git clone git@github.com:yishnish/sketch.git /home/vagrant/computer_programs/sketch
 	git clone git@github.com:yishnish/lyfe.git /home/vagrant/computer_programs/lyfe
 	git clone git@github.com:yishnish/sample-mvc.git /home/vagrant/computer_programs/sample-mvc
 	git clone git@github.com:yishnish/mytelnet.git /home/vagrant/computer_programs/mytelnet
-	 
+	git clone git@github.com:yishnish/nethack-bot.git /home/vagrant/computer_programs/nethack-bot
+	chown -hR vagrant /home/vagrant
+	
 	#kill all the vagrant user processes to force a logout 
 	pkill -KILL -u vagrant
 	 
