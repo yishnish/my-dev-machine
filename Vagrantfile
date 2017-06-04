@@ -94,7 +94,7 @@ Vagrant.configure("2") do |config|
 	#set global username and email for git
 	echo -e "[user]\n\tname = yishnish\n\temail = yishnish@gmail.com" > /home/vagrant/.gitconfig
 	#set global config to default pushing to the current checked out branch
-	git config --global push.default simple 
+	su -c "git config --global push.default simple" vagrant 
 	#move rsa keys for github to the vagrant user's .ssh directory
 	mkdir ~/.ssh
 	cp /vagrant/id_rsa /vagrant/id_rsa.pub ~/.ssh
