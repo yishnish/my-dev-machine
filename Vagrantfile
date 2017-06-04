@@ -119,6 +119,25 @@ Vagrant.configure("2") do |config|
 	 curl -sL https://deb.nodesource.com/setup_4.x | sh
 	 apt-get install -y nodejs
 	 
+	 #------------------------INSTALL RUBY AND RAILS------------------------------
+		#add mpapis public key
+		gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+		
+		#install rvm and current stable ruby 
+		curl -sSL https://get.rvm.io | bash -s stable --ruby
+		
+		#load the rvm script when you launch a bash shell
+		source ~/.rvm/scripts/rvm
+
+		#update out-of-date global gems
+		rvm gemset use global
+		gem update
+		
+		#install bundler globally
+		gem install bundler
+		#install nokogiri globally
+		gem install nokogiri
+		
 	 #change the vagrant directory owner to vagrant instead of root
 	 chown -hR vagrant /home/vagrant
 	 
