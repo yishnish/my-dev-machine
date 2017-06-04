@@ -66,112 +66,127 @@ Vagrant.configure("2") do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
    config.vm.provision "shell", inline: <<-SHELL
-
+	
+	#--------------ENVIRONMENT-------------------------
+	#enable multiple workspaces
+   	su -c "dbus-launch gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ hsize 2" vagrant
+	su -c "dbus-launch gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ vsize 2" vagrant
+	
+	#install a source controlled bashrc 
+	cp /vagrant/.bashrc /home/vagrant/.bashrc
+	#--------------ENVIRONMENT-------------------------
+	
+	#--------------CHROME-------------------------
 	#add chrome repo
 	wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
 	sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
 	
-     	apt-get update
-     	apt-get dist-upgrade
+    apt-get update
+    apt-get dist-upgrade
 
 	#install chrome 
 	apt-get install -y google-chrome-stable
-
-	 #set multiple workspaces
-	 #gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ hsize 2
-	 #gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ vsize 2
-	 
-	 #install git
-         apt-get install -y git
+	#--------------CHROME-------------------------
+	
+	#--------------GIT-------------------------
+	#install git
+    apt-get install -y git
 	#set global username and email for git
 	echo -e "[user]\n\tname = yishnish\n\temail = yishnish@gmail.com" > /home/vagrant/.gitconfig
 	#set global config to default pushing to the current checked out branch
 	git config --global push.default simple 
-	 #move rsa keys for github to the vagrant user's .ssh directory
-	 mkdir ~/.ssh
-	 cp /vagrant/id_rsa /vagrant/id_rsa.pub ~/.ssh
+	#move rsa keys for github to the vagrant user's .ssh directory
+	mkdir ~/.ssh
+	cp /vagrant/id_rsa /vagrant/id_rsa.pub ~/.ssh
 	 
-	 #change permissions on keys so git doesn't complain about them being lax
-	 chmod 600 ~/.ssh/id_rsa
-	 chmod 600 ~/.ssh/id_rsa.pub
+	#change permissions on keys so git doesn't complain about them being lax
+	chmod 600 ~/.ssh/id_rsa
+	chmod 600 ~/.ssh/id_rsa.pub
 	 
-	 #add github to known hosts
-	 ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
-	 cp /vagrant/id_rsa /vagrant/id_rsa.pub /home/vagrant/.ssh
+	#add github to known hosts
+	ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+	cp /vagrant/id_rsa /vagrant/id_rsa.pub /home/vagrant/.ssh
+	#--------------GIT------------------------- 
 	 
-	 #install node
-	 curl -sL https://deb.nodesource.com/setup_4.x | sh
-	 apt-get install -y nodejs
-	  
-	 #install a source controlled bashrc 
-	 cp /vagrant/.bashrc /home/vagrant/.bashrc
+	#--------------NODE-------------------------
+	#install node
+	curl -sL https://deb.nodesource.com/setup_4.x | sh
+	apt-get install -y nodejs
+	#--------------NODE-------------------------	  
 	 
-	 
-	 #------------------------INSTALL RVM, RUBY AND RAILS-RELATED-GEMS------------------------------
-		#add mpapis public key
-		gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-		
-		#install rvm and current stable ruby 
-		curl -sSL https://get.rvm.io | bash -s stable --ruby
-		
-		#change owner of /usr/local/rvm to vagrant user
-		sudo chown -R vagrant /usr/local/rvm/
-
-		#load the rvm script when you launch a bash shell
-		source /usr/local/rvm/scripts/rvm
-
-		#update out-of-date global gems
-		rvm gemset use global
-		gem update
-		
-		#install bundler globally
-		gem install bundler
-		#install nokogiri globally
-		gem install nokogiri
-		
-		echo "source /usr/local/rvm/scripts/rvm" >> /home/vagrant/.bashrc
-	 #------------------------END INSTALL RVM, RUBY AND RAILS-RELATED-GEMS------------------------------
-	 
-	 #clone repos
-	 mkdir -p /home/vagrant/computer_programs/
-	 git clone git@github.com:yishnish/sketch.git /home/vagrant/computer_programs/sketch
-	 git clone git@github.com:yishnish/lyfe.git /home/vagrant/computer_programs/lyfe
-	 git clone git@github.com:yishnish/sample-mvc.git /home/vagrant/computer_programs/sample-mvc
-	 git clone git@github.com:yishnish/mytelnet.git /home/vagrant/computer_programs/mytelnet
+	#------------------------RVM, RUBY AND RAILS-RELATED-GEMS------------------------------
+	#add mpapis public key
+	gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 	
-	 #install open-jdk
-	 apt-get install -y openjdk-8-jdk
-	 
-	 #install maven
-	 apt-get install -y maven
+	#install rvm and current stable ruby 
+	curl -sSL https://get.rvm.io | bash -s stable --ruby
 		
-	 #change the vagrant directory owner to vagrant instead of root
-	 chown -hR vagrant /home/vagrant
+	#change owner of /usr/local/rvm to vagrant user
+	sudo chown -R vagrant /usr/local/rvm/
+
+	#load the rvm script when you launch a bash shell
+	source /usr/local/rvm/scripts/rvm
+
+	#update out-of-date global gems
+	rvm gemset use global
+	gem update
+		
+	#install bundler globally
+	gem install bundler
+	#install nokogiri globally
+	gem install nokogiri
+		
+	echo "source /usr/local/rvm/scripts/rvm" >> /home/vagrant/.bashrc
+	#------------------------RVM, RUBY AND RAILS-RELATED-GEMS------------------------------
+	
+	#------------------------JAVA AND MAVEN------------------------------------
+	#install open-jdk
+	apt-get install -y openjdk-8-jdk
 	 
+	#install maven
+	apt-get install -y maven
+	#------------------------JAVA AND MAVEN------------------------------------		
+
+
+	#----------------IDE------------------------ 
 	#download and install intellij
 	curl --connect-timeout 60 --max-time 600 http://download-cf.jetbrains.com/idea/ideaIU-14.1.7.tar.gz > intellij.tar.gz
 	mkdir /home/vagrant/intellij && tar -xzf intellij.tar.gz -C /home/vagrant/intellij --strip-components 1
 	rm intellij.tar.gz
 	cp /vagrant/.run-intellij /home/vagrant/.run-intellij
+	#----------------IDE------------------------
 	
-	 #install docker
-	 apt-get -y install apt-transport-https ca-certificates
-	 apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
-	 echo "deb https://apt.dockerproject.org/repo ubuntu-xenial main" > /etc/apt/sources.list.d/docker.list
-	 apt-get update
-	 apt-get purge lxc-docker
-	 apt-get -y install linux-image-extra-$(uname -r)
-	 apt-get -y install docker-engine
-	 #groupadd docker
-	 usermod -aG docker vagrant
-	 #restart docker to pick up the group change
-	 service docker restart
+	
+	#----------------DOCKER------------------------
+	#install docker
+	apt-get -y install apt-transport-https ca-certificates
+	apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+	echo "deb https://apt.dockerproject.org/repo ubuntu-xenial main" > /etc/apt/sources.list.d/docker.list
+	apt-get update
+	apt-get purge lxc-docker
+	apt-get -y install linux-image-extra-$(uname -r)
+	apt-get -y install docker-engine
+	
+	#groupadd docker
+	usermod -aG docker vagrant
+	
+	#restart docker to pick up the group change
+	service docker restart
+	#----------------DOCKER------------------------
+	 			
+	#clone git repos
+	mkdir -p /home/vagrant/computer_programs/
+	chown -hR vagrant /home/vagrant
+	git clone git@github.com:yishnish/sketch.git /home/vagrant/computer_programs/sketch
+	git clone git@github.com:yishnish/lyfe.git /home/vagrant/computer_programs/lyfe
+	git clone git@github.com:yishnish/sample-mvc.git /home/vagrant/computer_programs/sample-mvc
+	git clone git@github.com:yishnish/mytelnet.git /home/vagrant/computer_programs/mytelnet
 	 
-	 #kill all the vagrant user processes to force a logout 
-	 pkill -KILL -u vagrant
+	#kill all the vagrant user processes to force a logout 
+	pkill -KILL -u vagrant
 	 
-	 #set local because it seems necessary in order to be able to start a gnome terminal
-	 localectl set-locale LANG=en_US.utf8
+	#set local because it seems necessary in order to be able to start a gnome terminal
+	localectl set-locale LANG=en_US.utf8
 	
    SHELL
 end
