@@ -173,20 +173,22 @@ Vagrant.configure("2") do |config|
 	#restart docker to pick up the group change
 	service docker restart
 	#----------------DOCKER------------------------
+
+	#----------------VAGRANT-AWS----------------------
+	# download and install a version of vagrant
+	wget https://releases.hashicorp.com/vagrant/2.0.0/vagrant_2.0.0_x86_64.deb
+	dpkg -i vagrant_2.0.0_x86_64.deb		
+
+	#install the vagrant-aws plugin
+	vagrant plugin install vagrant-aws
+	#install dummy box so the plugin can work
+	vagrant box add dummy-aws https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box
+	#----------------VAGRANT-AWS---------------------
 	 			
-	#clone git repos
-	mkdir -p /home/vagrant/computer_programs/	
-	git clone git@github.com:yishnish/sketch.git /home/vagrant/computer_programs/sketch
-	git clone git@github.com:yishnish/lyfe.git /home/vagrant/computer_programs/lyfe
-	git clone git@github.com:yishnish/sample-mvc.git /home/vagrant/computer_programs/sample-mvc
-	git clone git@github.com:yishnish/mytelnet.git /home/vagrant/computer_programs/mytelnet
-	git clone git@github.com:yishnish/nethack-bot.git /home/vagrant/computer_programs/nethack-bot
-	chown -hR vagrant /home/vagrant
-	
-	#kill all the vagrant user processes to force a logout 
+	#kill all the user processes to force a logout 
 	pkill -KILL -u vagrant
 	 
-	#set local because it seems necessary in order to be able to start a gnome terminal
+	#set locale because it seems necessary in order to be able to start a gnome terminal
 	localectl set-locale LANG=en_US.utf8
 	
    SHELL
