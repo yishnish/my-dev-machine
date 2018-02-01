@@ -129,4 +129,5 @@ alias drmi='docker rmi'
 alias dps='docker ps'
 alias dim='docker images'
 alias dnls='docker network ls'
-
+#elixir
+export PATH="$PATH:/usr/local/bin/elixir"

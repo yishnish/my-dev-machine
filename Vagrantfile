@@ -147,6 +147,12 @@ Vagrant.configure("2") do |config|
 	apt-get install -y maven
 	#------------------------JAVA AND MAVEN------------------------------------		
 
+	#------------------------ ELIXIR ----------------------------------
+	wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && sudo dpkg -i erlang-solutions_1.0_all.deb
+	sudo apt-get update
+	sudo apt-get install -y esl-erlang
+	sudo apt-get install -y elixir
+	#------------------------ ELIXIR ----------------------------------
 
 	#----------------IDE------------------------ 
 	#download and install intellij
